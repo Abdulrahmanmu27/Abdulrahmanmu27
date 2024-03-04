@@ -1,58 +1,23 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
-def load_and_prepare_data(targetA_path, targetB_path):
-    """
-    Load the datasets and prepare them by setting a DateTime index and extracting sequence numbers.
-    """
-    targetA_df = pd.read_csv(targetA_path, parse_dates=['Time'], index_col='Time')
-    targetB_df = pd.read_csv(targetB_path, parse_dates=['Time'], index_col='Time')
-    
-    targetA_df = extract_sequence_numbers(targetA_df)
-    targetB_df = extract_sequence_numbers(targetB_df)
-    
-    return targetA_df, targetB_df
+# Open the first file in read mode, the full path of the file must be used ensuring \ is replaced with \\ and remove “ at the start and end of the path
+targetA = "C:\\Users\\abdul\\OneDrive\\Desktop\\Computer Science\\Problem 1 Coursework\\targetA.csv"
 
-def extract_sequence_numbers(df):
-    """
-    Extracts sequence numbers from the 'Info' column.
-    """
-    df['Sequence_Number'] = df['Info'].str.extract(r'Seq=(\d+)', expand=False).astype(int)
-    return df
+# Open the second file in read mode, the full path of the file must be used ensuring \ is replaced with \\ and remove “ at the start and end of the path
+targetB ="C:\\Users\\abdul\\OneDrive\\Desktop\\Computer Science\\Problem 1 Coursework\\targetB.csv"
 
-def plot_sequence_numbers_over_time(df):
-    """
-    Plots sequence numbers over time.
-    """
-    plt.figure(figsize=(12, 6))
-    plt.plot(df.index, df['Sequence_Number'], marker='o', linestyle='', markersize=2)
-    plt.title('Graph 1: Sequence Numbers over Time')
-    plt.xlabel('Time')
-    plt.ylabel('Sequence Number')
-    plt.grid(True)
-    plt.show()
+# Combine the contents of both files
+combined_content = targetA + targetB
 
-def plot_probabilities_of_packet_lengths_improved(df):
-    """
-    Plots the probabilities of packet lengths with improved readability on the x-axis.
-    """
-    plt.figure(figsize=(12, 6))
-    df['Length'].plot(kind='hist', bins=30, density=True, alpha=0.6)
-    plt.gca().yaxis.set_major_formatter(plt.matplotlib.ticker.PercentFormatter(xmax=1))
-    plt.title('Graph 2: Probabilities of Packet Lengths (Improved)')
-    plt.xlabel('Packet Length')
-    plt.ylabel('Probability (%)')
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
+# Open a new file in write mode to save the combined files
+with open('combined_file.txt', 'w') as combined_file:
+    # Write the combined content to the new file in .txt format for python
+    combined_file.write(combined_content)
 
-# Define your file paths
-targetA_path = "C:\\Users\\abdul\\Downloads\\targetA.csv"
-targetB_path = "C:\\Users\\abdul\\Downloads\\targetB.csv"
+# The combined data are in the combined_file.txt file
+print("name of file: ", combined_file.name)
 
-# Load and prepare the data
-targetA_df, targetB_df = load_and_prepare_data(targetA_path, targetB_path)
-
-# Plotting
-plot_sequence_numbers_over_time(targetA_df)
-plot_probabilities_of_packet_lengths_improved(targetA_df)
+# This is to check whether the file is closed or not
+print("closed or not: ", combined_file.closed)
